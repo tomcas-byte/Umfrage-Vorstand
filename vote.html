@@ -3,123 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anonyme Stimmungsumfrage</title>
+<title>Stimmungsabfrage</title>
 <style>
-:root{
-  --bg:#f7f7f5;--surface:#fff;--border:#e2e2de;
-  --text:#1a1a18;--muted:#6b6b67;
-  --green:#1a9e74;--green-bg:#eaf7f2;--green-bd:#a7f3d0;
-  --r:10px;--rs:6px;
-  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f4f4f1;
+  color: #1a1a18;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
-.wrap{max-width:480px;width:100%}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.vh{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid var(--border)}
-.vh h1{font-size:1.05rem;font-weight:600}
-.vh p{font-size:.82rem;color:var(--muted);margin-top:4px}
-.vb{padding:1.5rem}
-.rule-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;font-size:.82rem;color:var(--muted);margin-bottom:1.25rem}
-.qopt{border:1px solid var(--border);border-radius:var(--rs);padding:14px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;transition:border-color .15s,background .15s}
-.qopt:hover{border-color:#bbb;background:var(--bg)}
-.qopt.sel{border-color:var(--green);background:var(--green-bg)}
-.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.qopt.sel .radio{border-color:var(--green);background:var(--green)}
-.rdot{width:7px;height:7px;border-radius:50%;background:#fff;display:none}
-.qopt.sel .rdot{display:block}
-.qtxt{font-size:.9rem;line-height:1.45}
-.sbtn{display:block;width:100%;padding:12px;margin-top:1.5rem;border:none;border-radius:var(--rs);background:var(--text);color:#fff;font-size:.95rem;font-family:var(--font);cursor:pointer;transition:opacity .15s}
-.sbtn:hover{opacity:.85}
-.sbtn:disabled{opacity:.35;cursor:not-allowed}
-.anote{font-size:.75rem;color:var(--muted);text-align:center;margin-top:1rem}
-.okwrap{text-align:center;padding:2.5rem 1.5rem}
-.ckc{width:64px;height:64px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-bd);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.75rem}
-.okwrap h2{font-size:1.1rem;font-weight:600;margin-bottom:6px}
-.okwrap p{font-size:.85rem;color:var(--muted);line-height:1.5}
-.owa{margin-top:1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;text-align:left}
-.oalbl{font-size:.75rem;color:var(--muted);margin-bottom:8px}
-.oarow{display:flex;align-items:center;gap:10px;font-size:.85rem;margin-bottom:5px}
-.dg{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
-.dx{width:8px;height:8px;border-radius:50%;background:#ddd;flex-shrink:0}
-.ewrap{padding:2.5rem 1.5rem;text-align:center;color:var(--muted)}
-.ewrap h2{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px}
-.ewrap p{font-size:.85rem;line-height:1.5}
+.card {
+  background: #fff;
+  border: 1px solid #e0e0dc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+}
+.card-head {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0dc;
+}
+.card-head h1 { font-size: 1.05rem; font-weight: 600; }
+.card-head p  { font-size: 0.82rem; color: #666; margin-top: 4px; }
+.card-body { padding: 1.5rem; }
+.hint {
+  background: #f4f4f1;
+  border: 1px solid #e0e0dc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: #666;
+  margin-bottom: 1.25rem;
+}
+.option {
+  border: 1px solid #e0e0dc;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+.option:hover { border-color: #bbb; background: #f9f9f7; }
+.option.chosen { border-color: #1a9e74; background: #eaf7f2; }
+.dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid #ccc;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.option.chosen .dot { border-color: #1a9e74; background: #1a9e74; }
+.dot-inner {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fff; display: none;
+}
+.option.chosen .dot-inner { display: block; }
+.option-text { font-size: 0.9rem; line-height: 1.45; }
+.submit {
+  display: block; width: 100%; padding: 12px;
+  margin-top: 1.5rem;
+  border: none; border-radius: 8px;
+  background: #1a1a18; color: #fff;
+  font-size: 0.95rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.submit:hover { opacity: 0.85; }
+.submit:disabled { opacity: 0.3; cursor: not-allowed; }
+.anon { font-size: 0.75rem; color: #999; text-align: center; margin-top: 1rem; }
+
+/* success */
+.done { text-align: center; padding: 2.5rem 1.5rem; }
+.check {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: #eaf7f2; border: 2px solid #a7f3d0;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.25rem; font-size: 1.6rem;
+}
+.done h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+.done p  { font-size: 0.85rem; color: #666; line-height: 1.5; }
+.my-answers {
+  margin-top: 1.25rem; text-align: left;
+  background: #f4f4f1; border: 1px solid #e0e0dc;
+  border-radius: 8px; padding: 12px 14px;
+}
+.my-answers .lbl { font-size: 0.75rem; color: #888; margin-bottom: 8px; }
+.ans-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.84rem; margin-bottom: 6px;
+}
+.ans-row:last-child { margin-bottom: 0; }
+.dot-yes { width: 8px; height: 8px; border-radius: 50%; background: #1a9e74; flex-shrink: 0; }
+.dot-no  { width: 8px; height: 8px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+
+/* error */
+.err { padding: 2.5rem 1.5rem; text-align: center; }
+.err h2 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+.err p  { font-size: 0.85rem; color: #666; line-height: 1.5; }
 </style>
 </head>
 <body>
-<div class="wrap"><div id="app"></div></div>
+<div class="card" id="root"></div>
+
 <script>
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function b64dec(str){return JSON.parse(decodeURIComponent(escape(atob(str))))}
-
-const LS_VOTES='umfrage_votes_v3';
-const LS_VOTED='umfrage_voted_v3';
-
-function votesFor(sid){try{return JSON.parse(localStorage.getItem(LS_VOTES)||'{}')[sid]||{}}catch(e){return{}}}
-function recordVote(sid,tok,ans){
-  let v={};try{v=JSON.parse(localStorage.getItem(LS_VOTES)||'{}')}catch(e){}
-  if(!v[sid])v[sid]={};v[sid][tok]=ans;localStorage.setItem(LS_VOTES,JSON.stringify(v));
-}
-function hasVotedLocally(tok){try{return !!JSON.parse(localStorage.getItem(LS_VOTED)||'{}')[tok]}catch(e){return false}}
-function markVotedLocally(tok){
-  let v={};try{v=JSON.parse(localStorage.getItem(LS_VOTED)||'{}')}catch(e){}
-  v[tok]=true;localStorage.setItem(LS_VOTED,JSON.stringify(v));
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-const params=new URLSearchParams(window.location.search);
-let payload=null;
-try{const d=params.get('d');if(!d)throw 0;payload=b64dec(d)}
-catch(e){
-  document.getElementById('app').innerHTML='<div class="card"><div class="ewrap"><h2>Ungültiger Link</h2><p>Dieser Link ist nicht gültig. Bitte wende dich an die Person, die ihn dir geschickt hat.</p></div></div>';
+function decode(str) {
+  return JSON.parse(decodeURIComponent(escape(atob(str))));
 }
 
-if(payload){
-  const{s:sid,n:name,t:token,q:questions}=payload;
-  if(!sid||!token||!name||!questions||questions.length!==3){
-    document.getElementById('app').innerHTML='<div class="card"><div class="ewrap"><h2>Ungültiger Link</h2><p>Die Daten in diesem Link sind unvollständig.</p></div></div>';
-  } else if(hasVotedLocally(token)||votesFor(sid)[token]!==undefined){
-    document.getElementById('app').innerHTML='<div class="card"><div class="ewrap"><h2>Du hast bereits abgestimmt.</h2><p>Dein persönlicher Link kann nur einmal verwendet werden.<br>Danke für deine Teilnahme!</p></div></div>';
+// localStorage keys – must match admin page
+var LS_VOTES = 'umfrage_votes_v4';
+var LS_VOTED = 'umfrage_myvotes_v4';
+
+function getVotesForSurvey(sid) {
+  try { return JSON.parse(localStorage.getItem(LS_VOTES) || '{}')[sid] || {}; }
+  catch(e) { return {}; }
+}
+
+function saveVote(sid, token, answer) {
+  var all = {};
+  try { all = JSON.parse(localStorage.getItem(LS_VOTES) || '{}'); } catch(e) {}
+  if (!all[sid]) all[sid] = {};
+  all[sid][token] = answer;
+  localStorage.setItem(LS_VOTES, JSON.stringify(all));
+}
+
+function alreadyVoted(token) {
+  try { return !!JSON.parse(localStorage.getItem(LS_VOTED) || '{}')[token]; }
+  catch(e) { return false; }
+}
+
+function markVoted(token) {
+  var v = {};
+  try { v = JSON.parse(localStorage.getItem(LS_VOTED) || '{}'); } catch(e) {}
+  v[token] = true;
+  localStorage.setItem(LS_VOTED, JSON.stringify(v));
+}
+
+function showError(title, msg) {
+  document.getElementById('root').innerHTML =
+    '<div class="err"><h2>' + esc(title) + '</h2><p>' + esc(msg) + '</p></div>';
+}
+
+// --- Parse URL ---
+var params = new URLSearchParams(window.location.search);
+var raw = params.get('d');
+
+if (!raw) {
+  showError('Ungültiger Link', 'Dieser Link enthält keine Daten. Bitte wende dich an die Person, die ihn dir geschickt hat.');
+} else {
+  var data;
+  try { data = decode(raw); }
+  catch(e) { data = null; }
+
+  if (!data || !data.sid || !data.token || !data.name || !data.options || !data.question) {
+    showError('Ungültiger Link', 'Die Daten in diesem Link sind beschädigt. Bitte wende dich an die Person, die ihn dir geschickt hat.');
+  } else if (alreadyVoted(data.token) || getVotesForSurvey(data.sid)[data.token] !== undefined) {
+    document.getElementById('root').innerHTML =
+      '<div class="done">' +
+        '<div class="check">✓</div>' +
+        '<h2>Du hast bereits abgestimmt.</h2>' +
+        '<p>Dein persönlicher Link kann nur einmal verwendet werden.<br>Danke für deine Teilnahme!</p>' +
+      '</div>';
   } else {
-    let sel=null;
-    document.getElementById('app').innerHTML=`
-      <div class="card">
-        <div class="vh"><h1>Anonyme Stimmungsabfrage</h1><p>Hallo ${esc(name)} – bitte wähle eine Antwort.</p></div>
-        <div class="vb">
-          <div class="rule-box">👆 Du kannst bei <strong>genau einer</strong> Frage Ja wählen. Alle anderen sind automatisch Nein.</div>
-          ${questions.map((q,i)=>`
-            <div class="qopt" id="qo-${i}" onclick="selQ(${i})">
-              <div class="radio"><div class="rdot"></div></div>
-              <div class="qtxt">${esc(q)}</div>
-            </div>`).join('')}
-          <button class="sbtn" id="sbtn" disabled onclick="doVote()">Abstimmen</button>
-          <p class="anote">🔒 Deine Antwort ist anonym.</p>
-        </div>
-      </div>`;
+    // Show voting form
+    var sid     = data.sid;
+    var token   = data.token;
+    var name    = data.name;
+    var question = data.question;
+    var options = data.options; // array of strings
 
-    window.selQ=function(i){
-      sel=i;
-      for(let j=0;j<3;j++)document.getElementById('qo-'+j).classList.toggle('sel',j===i);
-      document.getElementById('sbtn').disabled=false;
+    var optionsHtml = options.map(function(opt, i) {
+      return '<div class="option" id="opt-' + i + '" onclick="pick(' + i + ')">' +
+        '<div class="dot"><div class="dot-inner"></div></div>' +
+        '<div class="option-text">' + esc(opt) + '</div>' +
+      '</div>';
+    }).join('');
+
+    document.getElementById('root').innerHTML =
+      '<div class="card-head">' +
+        '<h1>Anonyme Stimmungsabfrage</h1>' +
+        '<p>Hallo ' + esc(name) + ' – bitte wähle eine Antwort.</p>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="hint">👆 Wähle eine der folgenden Antworten. Du kannst nur einmal abstimmen.</div>' +
+        '<div style="font-size:.9rem;font-weight:500;margin-bottom:12px">' + esc(question) + '</div>' +
+        optionsHtml +
+        '<button class="submit" id="submit-btn" disabled onclick="submit()">Abstimmen</button>' +
+        '<p class="anon">🔒 Deine Antwort ist anonym.</p>' +
+      '</div>';
+
+    var selected = null;
+
+    window.pick = function(i) {
+      selected = i;
+      options.forEach(function(_, j) {
+        document.getElementById('opt-' + j).classList.toggle('chosen', j === i);
+      });
+      document.getElementById('submit-btn').disabled = false;
     };
-    window.doVote=function(){
-      if(sel===null)return;
-      recordVote(sid,token,sel);
-      markVotedLocally(token);
-      document.getElementById('app').innerHTML=`
-        <div class="card"><div class="okwrap">
-          <div class="ckc">✓</div>
-          <h2>Danke für deine Stimme!</h2>
-          <p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schließen.</p>
-          <div class="owa">
-            <div class="oalbl">Deine Antworten (nur für dich sichtbar):</div>
-            ${questions.map((q,i)=>`
-              <div class="oarow">
-                <div class="${i===sel?'dg':'dx'}"></div>
-                <span style="${i===sel?'font-weight:500':'color:#bbb'}">${esc(q)}: <strong>${i===sel?'Ja':'Nein'}</strong></span>
-              </div>`).join('')}
-          </div>
-        </div></div>`;
+
+    window.submit = function() {
+      if (selected === null) return;
+      saveVote(sid, token, selected);
+      markVoted(token);
+
+      var answersHtml = options.map(function(opt, i) {
+        return '<div class="ans-row">' +
+          '<div class="' + (i === selected ? 'dot-yes' : 'dot-no') + '"></div>' +
+          '<span style="' + (i === selected ? 'font-weight:500' : 'color:#bbb') + '">' +
+            esc(opt) + ': <strong>' + (i === selected ? 'Ja' : 'Nein') + '</strong>' +
+          '</span>' +
+        '</div>';
+      }).join('');
+
+      document.getElementById('root').innerHTML =
+        '<div class="done">' +
+          '<div class="check">✓</div>' +
+          '<h2>Danke für deine Stimme!</h2>' +
+          '<p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schließen.</p>' +
+          '<div class="my-answers">' +
+            '<div class="lbl">Deine Antworten (nur für dich sichtbar):</div>' +
+            answersHtml +
+          '</div>' +
+        '</div>';
     };
   }
 }
