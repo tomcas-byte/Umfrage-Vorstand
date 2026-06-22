@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stimmungsumfrage</title>
+<style>
+:root {
+  --bg:#f7f7f5; --surface:#fff; --border:#e2e2de;
+  --text:#1a1a18; --muted:#6b6b67;
+  --green:#1a9e74; --green-bg:#eaf7f2; --green-bd:#a7f3d0;
+  --amber:#b45309; --amber-bg:#fef3c7;
+  --r:10px; --rs:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'SF Mono','Fira Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem}
+.page{max-width:760px;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem}
+.ct{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:1rem}
+input[type=text],textarea{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rs);font-size:.9rem;font-family:var(--font);background:var(--bg);color:var(--text);outline:none;transition:border-color .15s}
+input[type=text]:focus,textarea:focus{border-color:#888}
+textarea{resize:vertical;min-height:130px;font-size:.85rem}
+.btn{padding:8px 16px;border:1px solid var(--border);border-radius:var(--rs);font-size:.85rem;font-family:var(--font);cursor:pointer;background:var(--surface);color:var(--text);transition:background .12s}
+.btn:hover{background:var(--bg)}
+.btn-p{background:var(--text);color:var(--surface);border-color:var(--text)}
+.btn-p:hover{opacity:.85}
+.bsm{padding:5px 10px;font-size:.78rem}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+header{margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+header h1{font-size:1.1rem;font-weight:600}
+header p{font-size:.8rem;color:var(--muted);margin-top:2px}
+.adm-badge{display:inline-flex;padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:500;background:var(--amber-bg);color:var(--amber);border:1px solid #fde68a}
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.tab{padding:9px 18px;font-size:.85rem;border:none;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--font)}
+.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.section{display:none}.section.active{display:block}
+.qrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.qnum{width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;color:var(--muted);flex-shrink:0}
+.info-box{background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--rs);padding:10px 14px;font-size:.82rem;color:#065f46;margin-bottom:1rem}
+.lrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--bg)}
+.lrow:last-child{border-bottom:none}
+.pname{font-size:.85rem;font-weight:500;min-width:90px}
+.mono-url{font-family:var(--mono);font-size:.7rem;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:4px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:500;white-space:nowrap;flex-shrink:0}
+.pill-g{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.pill-ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem}
+.stat{background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center}
+.snum{font-size:1.8rem;font-weight:600}
+.slbl{font-size:.75rem;color:var(--muted);margin-top:2px}
+.bg2{margin-bottom:1rem}
+.bm{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px}
+.bq{color:var(--text);font-weight:500;max-width:72%}
+.bc{color:var(--muted)}
+.btrack{background:#eee;border-radius:4px;height:7px;overflow:hidden}
+.bfill{height:7px;background:var(--green);border-radius:4px;transition:width .4s}
+.drow{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--bg);font-size:.83rem;gap:8px}
+.drow:last-child{border-bottom:none}
+.aja{color:var(--green);font-weight:500}
+.apend{color:var(--muted);font-style:italic}
+.wa-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:12px;font-size:.8rem;font-family:var(--mono);white-space:pre-wrap;color:var(--text);margin-top:6px}
+.saved-hint{font-size:.75rem;color:var(--green);margin-top:6px;height:16px;opacity:0;transition:opacity .3s}
+.saved-hint.show{opacity:1}
+.vwrap{max-width:480px;margin:0 auto}
+.vh{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid var(--border)}
+.vh h1{font-size:1.05rem;font-weight:600}
+.vh p{font-size:.82rem;color:var(--muted);margin-top:4px}
+.vb{padding:1.5rem}
+.rule-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:10px 14px;font-size:.82rem;color:var(--muted);margin-bottom:1.25rem}
+.qopt{border:1px solid var(--border);border-radius:var(--rs);padding:14px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;transition:border-color .15s,background .15s}
+.qopt:hover{border-color:#bbb;background:var(--bg)}
+.qopt.sel{border-color:var(--green);background:var(--green-bg)}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.qopt.sel .radio{border-color:var(--green);background:var(--green)}
+.rdot{width:7px;height:7px;border-radius:50%;background:#fff;display:none}
+.qopt.sel .rdot{display:block}
+.qtxt{font-size:.9rem;line-height:1.45}
+.sbtn{display:block;width:100%;padding:12px;margin-top:1.5rem;border:none;border-radius:var(--rs);background:var(--text);color:#fff;font-size:.95rem;font-family:var(--font);cursor:pointer;transition:opacity .15s}
+.sbtn:hover{opacity:.85}
+.sbtn:disabled{opacity:.35;cursor:not-allowed}
+.anote{font-size:.75rem;color:var(--muted);text-align:center;margin-top:1rem}
+.okwrap{text-align:center;padding:2.5rem 1.5rem}
+.ckc{width:64px;height:64px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green-bd);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.75rem}
+.okwrap h2{font-size:1.1rem;font-weight:600;margin-bottom:6px}
+.okwrap p{font-size:.85rem;color:var(--muted);line-height:1.5}
+.owa{margin-top:1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;text-align:left}
+.oalbl{font-size:.75rem;color:var(--muted);margin-bottom:8px}
+.oarow{display:flex;align-items:center;gap:10px;font-size:.85rem;margin-bottom:5px}
+.dg{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.dx{width:8px;height:8px;border-radius:50%;background:#ddd;flex-shrink:0}
+.ewrap{padding:2.5rem 1.5rem;text-align:center;color:var(--muted)}
+.ewrap h2{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:8px}
+.ewrap p{font-size:.85rem;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const params = new URLSearchParams(window.location.search);
+renderAdminPage();
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') }
+function b64enc(obj){ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))) }
+function b64dec(str){ return JSON.parse(decodeURIComponent(escape(atob(str)))) }
+function makeToken(){ const a=new Uint8Array(10);crypto.getRandomValues(a);return Array.from(a).map(b=>b.toString(36)).join('').slice(0,16) }
+function selfUrl(){ const u=new URL(window.location.href);return u.origin+u.pathname }
+function downloadCSV(rows,fn){
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download=fn;a.click();
+}
+
+const LS_ADMIN = 'umfrage_admin_v3';
+const LS_VOTES = 'umfrage_votes_v3';
+const LS_VOTED = 'umfrage_voted_v3';
+
+function allVotes(){ try{ return JSON.parse(localStorage.getItem(LS_VOTES)||'{}')}catch(e){return {}} }
+function votesFor(sid){ return allVotes()[sid]||{} }
+function recordVote(sid,tok,ans){
+  const v=allVotes();if(!v[sid])v[sid]={};
+  v[sid][tok]=ans;localStorage.setItem(LS_VOTES,JSON.stringify(v));
+}
+function markVotedLocally(tok){
+  const v=JSON.parse(localStorage.getItem(LS_VOTED)||'{}'||'{}');
+  v[tok]=true;localStorage.setItem(LS_VOTED,JSON.stringify(v));
+}
+function hasVotedLocally(tok){
+  try{const v=JSON.parse(localStorage.getItem(LS_VOTED)||'{}'||'{}');return !!v[tok]}catch(e){return false}
+}
+
+let adminState={surveyId:null,questions:['','',''],participants:[]};
+
+function saveAdmin(){
+  adminState.questions=getQ();
+  const ni=document.getElementById('names-input');
+  if(ni)adminState.namesRaw=ni.value;
+  localStorage.setItem(LS_ADMIN,JSON.stringify(adminState));
+  const h=document.getElementById('saved-hint');
+  if(h){h.classList.add('show');setTimeout(()=>h.classList.remove('show'),1500)}
+}
+
+function loadAdmin(){
+  try{const raw=localStorage.getItem(LS_ADMIN);if(!raw)return;adminState=JSON.parse(raw);}catch(e){}
+}
+
+function getQ(){return [1,2,3].map(n=>(document.getElementById('q'+n)||{value:''}).value.trim())}
+
+function renderAdminPage(){
+  document.title='Umfrage \u2013 Admin';
+  loadAdmin();
+  document.getElementById('app').innerHTML=`
+    <div class="page">
+      <header>
+        <div><h1>\uD83D\uDDF3 Stimmungsumfrage \u2013 Admin</h1><p>Nur f\u00fcr dich sichtbar. Teile diese Seite nicht.</p></div>
+        <span class="adm-badge">\u2699 Admin</span>
+      </header>
+      <div class="tab-bar">
+        <button class="tab active" id="tb-setup"   onclick="aTab('setup')">Einrichten</button>
+        <button class="tab"        id="tb-links"   onclick="aTab('links')">Links</button>
+        <button class="tab"        id="tb-results" onclick="aTab('results')">Ergebnisse</button>
+      </div>
+      <div class="section active" id="tab-setup">
+        <div class="card">
+          <div class="ct">Fragen</div>
+          <div class="qrow"><div class="qnum">1</div><input type="text" id="q1" maxlength="120" oninput="saveAdmin()"></div>
+          <div class="qrow"><div class="qnum">2</div><input type="text" id="q2" maxlength="120" oninput="saveAdmin()"></div>
+          <div class="qrow"><div class="qnum">3</div><input type="text" id="q3" maxlength="120" oninput="saveAdmin()"></div>
+          <p style="font-size:.78rem;color:var(--muted);margin-top:10px">Jede Person darf bei genau einer Frage Ja w\u00e4hlen.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Teilnehmer</div>
+          <label>Namen \u2013 einer pro Zeile:</label>
+          <textarea id="names-input" oninput="saveAdmin()" placeholder="Anna&#10;Ben&#10;Clara&#10;David&#10;..."></textarea>
+          <div id="saved-hint" class="saved-hint">\u2713 Automatisch gespeichert</div>
+        </div>
+        <button class="btn btn-p" onclick="generateLinks()" style="width:100%;padding:12px;font-size:.95rem">Links generieren \u2192</button>
+      </div>
+      <div class="section" id="tab-links"><div id="links-body"><p style="color:var(--muted);font-size:.85rem;text-align:center;padding:2rem">Geh zuerst zu \u201eEinrichten\u201c und generiere die Links.</p></div></div>
+      <div class="section" id="tab-results"><div id="results-body"><p style="color:var(--muted);font-size:.85rem;text-align:center;padding:2rem">Noch keine Abstimmungen vorhanden.</p></div></div>
+    </div>`;
+
+  if(adminState.questions&&adminState.questions.some(q=>q)){
+    [1,2,3].forEach(n=>{const el=document.getElementById('q'+n);if(el)el.value=adminState.questions[n-1]||''});
+  } else {
+    document.getElementById('q1').value='Bin ich zufrieden mit der Gruppenatmosph\u00e4re?';
+    document.getElementById('q2').value='F\u00fchle ich mich gut informiert?';
+    document.getElementById('q3').value='W\u00fcrde ich die Gruppe weiterempfehlen?';
+  }
+  if(adminState.namesRaw)document.getElementById('names-input').value=adminState.namesRaw;
+  if(adminState.participants&&adminState.participants.length){refreshLinks();refreshResults();}
+  setInterval(()=>{const t=document.getElementById('tab-results');if(t&&t.classList.contains('active'))refreshResults()},8000);
+}
+
+function generateLinks(){
+  const q=getQ();
+  if(q.some(x=>!x)){alert('Bitte alle drei Fragen ausf\u00fcllen.');return}
+  const raw=document.getElementById('names-input').value;
+  const names=raw.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(!names.length){alert('Bitte mindestens einen Namen eingeben.');return}
+  const prevQ=(adminState.questions||[]).join('|');
+  if(!adminState.surveyId||q.join('|')!==prevQ)adminState.surveyId=makeToken();
+  const existing={};
+  (adminState.participants||[]).forEach(p=>{existing[p.name]=p.token});
+  adminState.questions=q;adminState.namesRaw=raw;
+  adminState.participants=names.map(name=>({name,token:existing[name]||makeToken()}));
+  saveAdmin();refreshLinks();aTab('links');
+}
+
+let _urls=[],_waTexts=[];
+
+function voteUrl(p){
+  const pl=b64enc({s:adminState.surveyId,n:p.name,t:p.token,q:adminState.questions});
+  const base=selfUrl().replace(/\/[^\/]*$/, '')+'/vote.html';
+  return base+'?d='+pl;
+}
+
+function refreshLinks(){
+  const{surveyId,questions,participants}=adminState;
+  if(!participants||!participants.length)return;
+  const sv=votesFor(surveyId);
+  _urls=participants.map(p=>voteUrl(p));
+  _waTexts=participants.map((p,i)=>`Hallo ${p.name}, hier ist dein pers\u00f6nlicher Link f\u00fcr unsere anonyme Gruppenumfrage:\n\n${_urls[i]}\n\nBitte nicht weiterschicken \u2013 der Link ist nur f\u00fcr dich.`);
+  document.getElementById('links-body').innerHTML=`
+    <div class="info-box">\u2713 Jeder Link ist personalisiert und kann nur einmal verwendet werden.</div>
+    <div class="card">
+      <div class="ct" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Einmal-Links</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn bsm" onclick="copyAll()">Alle kopieren</button>
+          <button class="btn bsm" onclick="exportLinksCSV()">CSV</button>
+        </div>
+      </div>
+      ${participants.map((p,i)=>{
+        const voted=sv[p.token]!==undefined;
+        return `<div class="lrow">
+          <span class="pname">${esc(p.name)}</span>
+          <span class="mono-url">${esc(_urls[i].slice(0,70))}\u2026</span>
+          <span class="pill ${voted?'pill-ok':'pill-g'}">${voted?'\u2713 Abgestimmt':'Ausstehend'}</span>
+          <button class="btn bsm" id="cb-${i}" onclick="copyOne(${i})">Kopieren</button>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="ct">WhatsApp-Nachrichten</div>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:12px">Kopiere jede Nachricht und schicke sie der Person direkt:</p>
+      ${participants.map((p,i)=>`
+        <div style="margin-bottom:14px">
+          <div style="font-size:.78rem;color:var(--muted);font-weight:500;margin-bottom:4px">${esc(p.name)}</div>
+          <div class="wa-block">${esc(_waTexts[i])}</div>
+          <button class="btn bsm" style="margin-top:6px" onclick="copyWA(${i})">Nachricht kopieren</button>
+        </div>`).join('')}
+    </div>`;
+}
+
+function copyOne(i){navigator.clipboard.writeText(_urls[i]).then(()=>{const b=document.getElementById('cb-'+i);const o=b.textContent;b.textContent='\u2713';setTimeout(()=>b.textContent=o,1500)})}
+function copyAll(){navigator.clipboard.writeText(adminState.participants.map((p,i)=>`${p.name}: ${_urls[i]}`).join('\n'))}
+function copyWA(i){navigator.clipboard.writeText(_waTexts[i])}
+function exportLinksCSV(){
+  const sv=votesFor(adminState.surveyId);
+  const rows=[['Name','Link','Status']];
+  adminState.participants.forEach((p,i)=>rows.push([p.name,_urls[i],sv[p.token]!==undefined?'Abgestimmt':'Ausstehend']));
+  downloadCSV(rows,'links.csv');
+}
+
+function refreshResults(){
+  const{surveyId,questions,participants}=adminState;
+  if(!participants||!participants.length)return;
+  const sv=votesFor(surveyId);
+  const total=participants.length;
+  const voted=participants.filter(p=>sv[p.token]!==undefined).length;
+  const counts=[0,0,0];
+  participants.forEach(p=>{const a=sv[p.token];if(a!==undefined&&a>=0&&a<=2)counts[a]++});
+  document.getElementById('results-body').innerHTML=`
+    <div class="sgrid">
+      <div class="stat"><div class="snum">${total}</div><div class="slbl">Eingeladen</div></div>
+      <div class="stat"><div class="snum">${voted}</div><div class="slbl">Abgestimmt</div></div>
+      <div class="stat"><div class="snum">${total?Math.round(voted/total*100)+'%':'\u2013'}</div><div class="slbl">Beteiligung</div></div>
+    </div>
+    <div class="card">
+      <div class="ct">Ergebnis je Frage</div>
+      ${(questions||[]).map((q,i)=>{
+        const pct=voted?Math.round(counts[i]/voted*100):0;
+        return `<div class="bg2"><div class="bm"><span class="bq">${esc(q)}</span><span class="bc">${counts[i]} Ja \u00b7 ${voted-counts[i]} Nein</span></div><div class="btrack"><div class="bfill" style="width:${pct}%"></div></div></div>`;
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="ct">Wer hat wie abgestimmt (nur f\u00fcr dich)</div>
+      ${participants.map(p=>{
+        const a=sv[p.token];
+        return `<div class="drow"><span>${esc(p.name)}</span><span>${a!==undefined?`<span class="aja">Ja: ${esc(questions[a])}</span>`:`<span class="apend">Noch nicht abgestimmt</span>`}</span></div>`;
+      }).join('')}
+    </div>
+    <div style="text-align:center;margin-top:.5rem">
+      <button class="btn bsm" onclick="exportResultsCSV()">Ergebnisse als CSV</button>
+    </div>`;
+}
+
+function exportResultsCSV(){
+  const{surveyId,questions,participants}=adminState;
+  const sv=votesFor(surveyId);
+  const rows=[['Name','Ja-Antwort','Abgestimmt']];
+  participants.forEach(p=>{const a=sv[p.token];rows.push([p.name,a!==undefined?questions[a]:'',a!==undefined?'Ja':'Nein'])});
+  downloadCSV(rows,'ergebnisse.csv');
+}
+
+function aTab(name){
+  ['setup','links','results'].forEach(n=>{
+    document.getElementById('tab-'+n).classList.toggle('active',n===name);
+    document.getElementById('tb-'+n).classList.toggle('active',n===name);
+  });
+  if(name==='links')refreshLinks();
+  if(name==='results')refreshResults();
+}
+
+function renderVotePage(){
+  document.title='Anonyme Stimmungsumfrage';
+  let payload=null;
+  try{const d=params.get('d');if(!d)throw 0;payload=b64dec(d)}
+  catch(e){return voteErr('Ung\u00fcltiger Link','Dieser Link ist nicht g\u00fcltig. Wende dich an die Person, die ihn dir geschickt hat.')}
+  const{s:sid,n:name,t:token,q:questions}=payload;
+  if(!sid||!token||!name||!questions||questions.length!==3)
+    return voteErr('Ung\u00fcltiger Link','Die Daten in diesem Link sind unvollst\u00e4ndig.');
+  if(hasVotedLocally(token)||votesFor(sid)[token]!==undefined)
+    return voteAlready();
+  let sel=null;
+  document.getElementById('app').innerHTML=`
+    <div class="vwrap"><div class="card" style="padding:0">
+      <div class="vh"><h1>Anonyme Stimmungsabfrage</h1><p>Hallo ${esc(name)} \u2013 bitte w\u00e4hle eine Antwort.</p></div>
+      <div class="vb">
+        <div class="rule-box">\uD83D\uDC46 Du kannst bei <strong>genau einer</strong> Frage Ja w\u00e4hlen. Alle anderen sind automatisch Nein.</div>
+        ${questions.map((q,i)=>`
+          <div class="qopt" id="qo-${i}" onclick="selQ(${i})">
+            <div class="radio"><div class="rdot"></div></div>
+            <div class="qtxt">${esc(q)}</div>
+          </div>`).join('')}
+        <button class="sbtn" id="sbtn" disabled onclick="doVote()">Abstimmen</button>
+        <p class="anote">\uD83D\uDD12 Deine Antwort ist anonym.</p>
+      </div>
+    </div></div>`;
+  window.selQ=function(i){
+    sel=i;
+    for(let j=0;j<3;j++)document.getElementById('qo-'+j).classList.toggle('sel',j===i);
+    document.getElementById('sbtn').disabled=false;
+  };
+  window.doVote=function(){
+    if(sel===null)return;
+    recordVote(sid,token,sel);
+    markVotedLocally(token);
+    document.getElementById('app').innerHTML=`
+      <div class="vwrap"><div class="card" style="padding:0"><div class="okwrap">
+        <div class="ckc">\u2713</div>
+        <h2>Danke f\u00fcr deine Stimme!</h2>
+        <p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schlie\u00dfen.</p>
+        <div class="owa">
+          <div class="oalbl">Deine Antworten (nur f\u00fcr dich sichtbar):</div>
+          ${questions.map((q,i)=>`
+            <div class="oarow">
+              <div class="${i===sel?'dg':'dx'}"></div>
+              <span style="${i===sel?'font-weight:500':'color:#bbb'}">${esc(q)}: <strong>${i===sel?'Ja':'Nein'}</strong></span>
+            </div>`).join('')}
+        </div>
+      </div></div></div>`;
+  };
+}
+
+function voteErr(title,msg){
+  document.getElementById('app').innerHTML=`<div class="vwrap"><div class="card"><div class="ewrap"><h2>${esc(title)}</h2><p>${esc(msg)}</p></div></div></div>`;
+}
+function voteAlready(){
+  document.getElementById('app').innerHTML=`<div class="vwrap"><div class="card"><div class="ewrap"><h2>Du hast bereits abgestimmt.</h2><p>Dein pers\u00f6nlicher Link kann nur einmal verwendet werden.<br>Danke f\u00fcr deine Teilnahme!</p></div></div></div>`;
+}
+<\/script>
+</body>
+</html>
