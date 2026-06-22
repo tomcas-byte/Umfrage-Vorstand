@@ -6,163 +6,62 @@
 <title>Umfrage – Admin</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f4f4f1;
-  color: #1a1a18;
-  min-height: 100vh;
-  padding: 2rem 1rem;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f1; color: #1a1a18; min-height: 100vh; padding: 2rem 1rem; }
 .page { max-width: 720px; margin: 0 auto; }
-
-/* header */
-.top {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 0.75rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid #e0e0dc;
-  margin-bottom: 1.75rem;
-}
+.top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid #e0e0dc; margin-bottom: 1.75rem; }
 .top h1 { font-size: 1.1rem; font-weight: 600; }
 .top p  { font-size: 0.8rem; color: #888; margin-top: 2px; }
-.badge {
-  padding: 4px 12px; border-radius: 99px;
-  font-size: 0.75rem; font-weight: 500;
-  background: #fef3c7; color: #92400e;
-  border: 1px solid #fde68a;
-}
-
-/* tabs */
+.badge { padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 500; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 .tabs { display: flex; border-bottom: 1px solid #e0e0dc; margin-bottom: 1.5rem; }
-.tab-btn {
-  padding: 8px 18px; font-size: 0.85rem;
-  border: none; background: none; color: #888;
-  cursor: pointer; border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
+.tab-btn { padding: 8px 18px; font-size: 0.85rem; border: none; background: none; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
 .tab-btn.on { color: #1a1a18; border-bottom-color: #1a1a18; font-weight: 500; }
 .tab-panel { display: none; }
 .tab-panel.on { display: block; }
-
-/* cards */
-.card {
-  background: #fff; border: 1px solid #e0e0dc;
-  border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
-}
-.card-title {
-  font-size: 0.78rem; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  color: #888; margin-bottom: 1rem;
-}
-
-/* form elements */
+.card { background: #fff; border: 1px solid #e0e0dc; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+.card-title { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 1rem; }
 label { font-size: 0.84rem; color: #666; display: block; margin-bottom: 4px; }
-input[type="text"] {
-  width: 100%; padding: 8px 12px;
-  border: 1px solid #e0e0dc; border-radius: 7px;
-  font-size: 0.9rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f9f9f7; color: #1a1a18;
-  outline: none; transition: border-color 0.15s;
-}
+input[type="text"] { width: 100%; padding: 8px 12px; border: 1px solid #e0e0dc; border-radius: 7px; font-size: 0.9rem; font-family: inherit; background: #f9f9f7; color: #1a1a18; outline: none; transition: border-color 0.15s; }
 input[type="text"]:focus { border-color: #999; background: #fff; }
-textarea {
-  width: 100%; padding: 8px 12px;
-  border: 1px solid #e0e0dc; border-radius: 7px;
-  font-size: 0.85rem; resize: vertical; min-height: 120px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f9f9f7; color: #1a1a18;
-  outline: none; transition: border-color 0.15s;
-}
+textarea { width: 100%; padding: 8px 12px; border: 1px solid #e0e0dc; border-radius: 7px; font-size: 0.85rem; resize: vertical; min-height: 120px; font-family: inherit; background: #f9f9f7; color: #1a1a18; outline: none; transition: border-color 0.15s; }
 textarea:focus { border-color: #999; background: #fff; }
-
-/* buttons */
-.btn {
-  padding: 7px 15px; border: 1px solid #e0e0dc; border-radius: 7px;
-  font-size: 0.84rem; cursor: pointer; background: #fff; color: #1a1a18;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  transition: background 0.12s;
-}
+.btn { padding: 7px 15px; border: 1px solid #e0e0dc; border-radius: 7px; font-size: 0.84rem; cursor: pointer; background: #fff; color: #1a1a18; font-family: inherit; transition: background 0.12s; }
 .btn:hover { background: #f4f4f1; }
 .btn-sm { padding: 5px 10px; font-size: 0.78rem; }
-.btn-primary {
-  background: #1a1a18; color: #fff; border-color: #1a1a18;
-  width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 0.5rem;
-}
+.btn-primary { background: #1a1a18; color: #fff; border-color: #1a1a18; width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 0.5rem; }
 .btn-primary:hover { opacity: 0.85; }
-
-/* options editor */
 .opt-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-.opt-num {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: #f4f4f1; border: 1px solid #e0e0dc;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.72rem; font-weight: 600; color: #888; flex-shrink: 0;
-}
-
-/* participants / links */
+.opt-num { width: 24px; height: 24px; border-radius: 50%; background: #f4f4f1; border: 1px solid #e0e0dc; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: #888; flex-shrink: 0; }
 .names-hint { font-size: 0.78rem; color: #888; margin-top: 6px; }
-.info-bar {
-  background: #eaf7f2; border: 1px solid #a7f3d0; border-radius: 7px;
-  padding: 10px 14px; font-size: 0.82rem; color: #065f46; margin-bottom: 1rem;
-}
-.link-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 0; border-bottom: 1px solid #f4f4f1;
-}
+.info-bar { background: #eaf7f2; border: 1px solid #a7f3d0; border-radius: 7px; padding: 10px 14px; font-size: 0.82rem; color: #065f46; margin-bottom: 1rem; }
+.link-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid #f4f4f1; }
 .link-row:last-child { border-bottom: none; }
 .p-name { font-size: 0.85rem; font-weight: 500; min-width: 80px; }
-.p-url {
-  font-family: 'SF Mono', 'Fira Mono', monospace;
-  font-size: 0.7rem; color: #999; background: #f4f4f1;
-  padding: 3px 8px; border-radius: 4px;
-  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
-}
-.pill {
-  padding: 3px 10px; border-radius: 99px;
-  font-size: 0.72rem; font-weight: 500; white-space: nowrap; flex-shrink: 0;
-}
+.p-url { font-family: 'SF Mono','Fira Mono',monospace; font-size: 0.7rem; color: #999; background: #f4f4f1; padding: 3px 8px; border-radius: 4px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.pill { padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
 .pill-gray  { background: #f4f4f1; color: #888; border: 1px solid #e0e0dc; }
 .pill-green { background: #eaf7f2; color: #1a9e74; border: 1px solid #a7f3d0; }
-
-/* wa messages */
-.wa-msg {
-  font-family: 'SF Mono', 'Fira Mono', monospace;
-  font-size: 0.8rem; white-space: pre-wrap;
-  background: #f4f4f1; border: 1px solid #e0e0dc;
-  border-radius: 7px; padding: 12px; margin-top: 6px; color: #1a1a18;
-}
 .wa-block { margin-bottom: 16px; }
 .wa-name { font-size: 0.78rem; font-weight: 600; color: #888; margin-bottom: 4px; }
-
-/* stats */
+.wa-msg { font-family: 'SF Mono','Fira Mono',monospace; font-size: 0.8rem; white-space: pre-wrap; background: #f4f4f1; border: 1px solid #e0e0dc; border-radius: 7px; padding: 12px; margin-top: 6px; color: #1a1a18; }
 .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1rem; }
 .stat { background: #f4f4f1; border-radius: 8px; padding: 14px; text-align: center; }
 .stat-n { font-size: 1.8rem; font-weight: 600; }
 .stat-l { font-size: 0.75rem; color: #888; margin-top: 2px; }
-
-/* bars */
 .bar-wrap { margin-bottom: 1rem; }
 .bar-top { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
 .bar-q { font-weight: 500; max-width: 70%; }
 .bar-c { color: #888; }
 .bar-bg { background: #eee; border-radius: 4px; height: 7px; overflow: hidden; }
 .bar-fill { height: 7px; background: #1a9e74; border-radius: 4px; transition: width 0.4s; }
-
-/* detail table */
-.det-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 7px 0; border-bottom: 1px solid #f4f4f1; font-size: 0.83rem; gap: 8px;
-}
+.det-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f4f4f1; font-size: 0.83rem; gap: 8px; }
 .det-row:last-child { border-bottom: none; }
 .ans-yes { color: #1a9e74; font-weight: 500; }
 .ans-no  { color: #bbb; font-style: italic; }
+.refreshing { font-size: 0.75rem; color: #aaa; text-align: right; margin-bottom: 8px; }
 </style>
 </head>
 <body>
 <div class="page">
-
   <div class="top">
     <div>
       <h1>🗳 Stimmungsumfrage – Admin</h1>
@@ -177,132 +76,98 @@ textarea:focus { border-color: #999; background: #fff; }
     <button class="tab-btn"   onclick="tab('results',this)">Ergebnisse</button>
   </div>
 
-  <!-- ── SETUP ── -->
+  <!-- SETUP -->
   <div id="panel-setup" class="tab-panel on">
     <div class="card">
       <div class="card-title">Frage</div>
-      <input type="text" id="question" maxlength="160"
-        value="Wen wählst du als Vorstand?">
+      <input type="text" id="question" maxlength="160" value="Wen wählst du als Gruppenleitung?">
     </div>
-
     <div class="card">
       <div class="card-title">Antwortmöglichkeiten</div>
       <div class="opt-row"><div class="opt-num">1</div><input type="text" id="o0" maxlength="80" value="Janne"></div>
       <div class="opt-row"><div class="opt-num">2</div><input type="text" id="o1" maxlength="80" value="Christian"></div>
       <div class="opt-row"><div class="opt-num">3</div><input type="text" id="o2" maxlength="80" value="Richard"></div>
     </div>
-
     <div class="card">
       <div class="card-title">Teilnehmer</div>
       <label>Namen – einer pro Zeile:</label>
       <textarea id="names" placeholder="Anna&#10;Ben&#10;Clara&#10;David&#10;..."></textarea>
       <p class="names-hint">Jede Person bekommt einen eigenen Einmal-Link.</p>
     </div>
-
     <button class="btn btn-primary" onclick="generate()">Links generieren →</button>
   </div>
 
-  <!-- ── LINKS ── -->
+  <!-- LINKS -->
   <div id="panel-links" class="tab-panel">
     <div id="links-content">
-      <p style="color:#888;font-size:.85rem;text-align:center;padding:2rem">
-        Geh zuerst zu „Einrichten" und klick auf „Links generieren".
-      </p>
+      <p style="color:#888;font-size:.85rem;text-align:center;padding:2rem">Geh zuerst zu „Einrichten" und klick auf „Links generieren".</p>
     </div>
   </div>
 
-  <!-- ── RESULTS ── -->
+  <!-- RESULTS -->
   <div id="panel-results" class="tab-panel">
     <div id="results-content">
-      <p style="color:#888;font-size:.85rem;text-align:center;padding:2rem">
-        Noch keine Daten vorhanden.
-      </p>
+      <p style="color:#888;font-size:.85rem;text-align:center;padding:2rem">Noch keine Daten vorhanden.</p>
     </div>
   </div>
-
 </div>
 
 <script>
-// ── Storage keys (must match vote.html) ──────────────────────────────────────
-var LS_STATE  = 'umfrage_admin_v4';
-var LS_VOTES  = 'umfrage_votes_v4';
+var SUPABASE_URL = 'https://fiftckimaagmcgadbqtm.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZnRja2ltYWFnbWNnYWRicXRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMjcyNTcsImV4cCI6MjA5NzcwMzI1N30.n15imNIzRuWEWtn9zyj4vKZzm0YroymB_5lSKUWNj20';
+var LS_STATE = 'umfrage_admin_v4';
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function encode(obj) { return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))); }
+function randomToken() { var a=new Uint8Array(12);crypto.getRandomValues(a);return Array.from(a).map(function(b){return b.toString(36);}).join('').slice(0,16); }
 
-function encode(obj) {
-  return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
-}
-
-function randomToken() {
-  var a = new Uint8Array(12);
-  crypto.getRandomValues(a);
-  return Array.from(a).map(function(b){ return b.toString(36); }).join('').slice(0,16);
-}
-
-// The vote page lives next to this file, named vote.html
 function votePageUrl() {
-  var here = window.location.href;
-  // strip filename and query, append vote.html
-  var base = here.split('?')[0];
+  var base = window.location.href.split('?')[0];
   base = base.substring(0, base.lastIndexOf('/') + 1);
   return base + 'vote.html';
 }
 
-function makeVoteUrl(participant) {
-  var payload = encode({
-    sid:     state.surveyId,
-    name:    participant.name,
-    token:   participant.token,
-    question: state.question,
-    options: state.options
-  });
+function makeVoteUrl(p) {
+  var payload = encode({ sid: state.surveyId, name: p.name, token: p.token, question: state.question, options: state.options });
   return votePageUrl() + '?d=' + payload;
 }
 
 // ── State ────────────────────────────────────────────────────────────────────
-var state = {
-  surveyId:    null,
-  question:    '',
-  options:     [],
-  participants: []  // [{name, token}]
-};
+var state = { surveyId: null, question: '', options: [], participants: [] };
 
-function saveState() {
-  localStorage.setItem(LS_STATE, JSON.stringify(state));
-}
+function saveState() { localStorage.setItem(LS_STATE, JSON.stringify(state)); }
 
 function loadState() {
   try {
     var raw = localStorage.getItem(LS_STATE);
     if (!raw) return;
-    var s = JSON.parse(raw);
-    state = s;
-    // Restore form fields
-    if (s.question) document.getElementById('question').value = s.question;
-    if (s.options && s.options.length >= 3) {
-      document.getElementById('o0').value = s.options[0] || '';
-      document.getElementById('o1').value = s.options[1] || '';
-      document.getElementById('o2').value = s.options[2] || '';
+    state = JSON.parse(raw);
+    if (state.question) document.getElementById('question').value = state.question;
+    if (state.options && state.options.length >= 3) {
+      document.getElementById('o0').value = state.options[0] || '';
+      document.getElementById('o1').value = state.options[1] || '';
+      document.getElementById('o2').value = state.options[2] || '';
     }
-    if (s.participants && s.participants.length) {
-      document.getElementById('names').value = s.participants.map(function(p){ return p.name; }).join('\n');
+    if (state.participants && state.participants.length) {
+      document.getElementById('names').value = state.participants.map(function(p){ return p.name; }).join('\n');
     }
   } catch(e) {}
 }
 
-function getVotesForSurvey() {
-  try {
-    var all = JSON.parse(localStorage.getItem(LS_VOTES) || '{}');
-    return all[state.surveyId] || {};
-  } catch(e) { return {}; }
+// ── Supabase ─────────────────────────────────────────────────────────────────
+async function fetchVotes() {
+  var res = await fetch(
+    SUPABASE_URL + '/rest/v1/votes?survey_id=eq.' + encodeURIComponent(state.surveyId) + '&select=token,answer',
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+  );
+  if (!res.ok) return {};
+  var rows = await res.json();
+  var map = {};
+  rows.forEach(function(r){ map[r.token] = r.answer; });
+  return map;
 }
 
-// ── Tab switching ────────────────────────────────────────────────────────────
+// ── Tabs ─────────────────────────────────────────────────────────────────────
 function tab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('on'); });
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('on'); });
@@ -312,205 +177,171 @@ function tab(name, btn) {
   if (name === 'results') renderResults();
 }
 
-// ── Generate links ───────────────────────────────────────────────────────────
+// ── Generate ──────────────────────────────────────────────────────────────────
 function generate() {
   var question = document.getElementById('question').value.trim();
-  var options = [
-    document.getElementById('o0').value.trim(),
-    document.getElementById('o1').value.trim(),
-    document.getElementById('o2').value.trim()
-  ];
-  var namesRaw = document.getElementById('names').value;
-  var names = namesRaw.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+  var options  = [document.getElementById('o0').value.trim(), document.getElementById('o1').value.trim(), document.getElementById('o2').value.trim()];
+  var names    = document.getElementById('names').value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
 
-  if (!question)               { alert('Bitte eine Frage eingeben.'); return; }
-  if (options.some(function(o){ return !o; })) { alert('Bitte alle drei Antwortmöglichkeiten ausfüllen.'); return; }
-  if (!names.length)           { alert('Bitte mindestens einen Namen eingeben.'); return; }
+  if (!question)                              { alert('Bitte eine Frage eingeben.'); return; }
+  if (options.some(function(o){ return !o; })){ alert('Bitte alle drei Antwortmöglichkeiten ausfüllen.'); return; }
+  if (!names.length)                          { alert('Bitte mindestens einen Namen eingeben.'); return; }
 
-  // Keep existing tokens for same names, new survey ID if question/options changed
-  var prevKey = state.question + '|' + (state.options || []).join('|');
+  var prevKey = state.question + '|' + (state.options||[]).join('|');
   var newKey  = question + '|' + options.join('|');
-  if (!state.surveyId || newKey !== prevKey) {
-    state.surveyId = randomToken();
-  }
+  if (!state.surveyId || newKey !== prevKey) state.surveyId = randomToken();
 
   var existing = {};
-  (state.participants || []).forEach(function(p){ existing[p.name] = p.token; });
+  (state.participants||[]).forEach(function(p){ existing[p.name] = p.token; });
 
-  state.question    = question;
-  state.options     = options;
-  state.participants = names.map(function(name) {
-    return { name: name, token: existing[name] || randomToken() };
-  });
-
+  state.question     = question;
+  state.options      = options;
+  state.participants = names.map(function(name){ return { name: name, token: existing[name] || randomToken() }; });
   saveState();
   renderLinks();
 
-  // Switch to links tab
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('on'); });
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('on'); });
   document.querySelectorAll('.tab-btn')[1].classList.add('on');
   document.getElementById('panel-links').classList.add('on');
 }
 
-// ── Render: Links ────────────────────────────────────────────────────────────
-var _urls = [];
-var _msgs = [];
+// ── Render Links ──────────────────────────────────────────────────────────────
+var _urls = [], _msgs = [];
 
 function renderLinks() {
   if (!state.participants || !state.participants.length) return;
-
-  var votes = getVotesForSurvey();
   _urls = state.participants.map(function(p){ return makeVoteUrl(p); });
-  _msgs = state.participants.map(function(p, i) {
+  _msgs = state.participants.map(function(p, i){
     return 'Hallo ' + p.name + ', hier ist dein persönlicher Link für unsere anonyme Gruppenumfrage:\n\n' + _urls[i] + '\n\nBitte nicht weiterschicken – der Link ist nur für dich.';
   });
 
-  var rowsHtml = state.participants.map(function(p, i) {
-    var voted = votes[p.token] !== undefined;
-    return '<div class="link-row">' +
-      '<span class="p-name">' + esc(p.name) + '</span>' +
-      '<span class="p-url">' + esc(_urls[i]) + '</span>' +
-      '<span class="pill ' + (voted ? 'pill-green' : 'pill-gray') + '">' + (voted ? '✓ Abgestimmt' : 'Ausstehend') + '</span>' +
-      '<button class="btn btn-sm" id="cb-' + i + '" onclick="copyUrl(' + i + ')">Kopieren</button>' +
-    '</div>';
-  }).join('');
+  fetchVotes().then(function(votes) {
+    var rowsHtml = state.participants.map(function(p, i) {
+      var voted = votes[p.token] !== undefined;
+      return '<div class="link-row">' +
+        '<span class="p-name">' + esc(p.name) + '</span>' +
+        '<span class="p-url">' + esc(_urls[i]) + '</span>' +
+        '<span class="pill ' + (voted ? 'pill-green' : 'pill-gray') + '">' + (voted ? '✓ Abgestimmt' : 'Ausstehend') + '</span>' +
+        '<button class="btn btn-sm" id="cb-' + i + '" onclick="copyUrl(' + i + ')">Kopieren</button>' +
+      '</div>';
+    }).join('');
 
-  var waHtml = state.participants.map(function(p, i) {
-    return '<div class="wa-block">' +
-      '<div class="wa-name">' + esc(p.name) + '</div>' +
-      '<div class="wa-msg">' + esc(_msgs[i]) + '</div>' +
-      '<button class="btn btn-sm" style="margin-top:6px" onclick="copyMsg(' + i + ')">Nachricht kopieren</button>' +
-    '</div>';
-  }).join('');
+    var waHtml = state.participants.map(function(p, i) {
+      return '<div class="wa-block">' +
+        '<div class="wa-name">' + esc(p.name) + '</div>' +
+        '<div class="wa-msg">' + esc(_msgs[i]) + '</div>' +
+        '<button class="btn btn-sm" style="margin-top:6px" onclick="copyMsg(' + i + ')">Nachricht kopieren</button>' +
+      '</div>';
+    }).join('');
 
-  document.getElementById('links-content').innerHTML =
-    '<div class="info-bar">✓ Jeden Link direkt und persönlich per WhatsApp schicken – nicht in die Gruppe!</div>' +
-    '<div class="card">' +
-      '<div class="card-title" style="display:flex;justify-content:space-between;align-items:center">' +
-        '<span>Einmal-Links</span>' +
-        '<div style="display:flex;gap:6px">' +
-          '<button class="btn btn-sm" onclick="copyAll()">Alle kopieren</button>' +
-          '<button class="btn btn-sm" onclick="exportCsv()">CSV</button>' +
+    document.getElementById('links-content').innerHTML =
+      '<div class="info-bar">✓ Jeden Link direkt und persönlich per WhatsApp schicken – nicht in die Gruppe!</div>' +
+      '<div class="card">' +
+        '<div class="card-title" style="display:flex;justify-content:space-between;align-items:center">' +
+          '<span>Einmal-Links</span>' +
+          '<div style="display:flex;gap:6px">' +
+            '<button class="btn btn-sm" onclick="copyAll()">Alle kopieren</button>' +
+            '<button class="btn btn-sm" onclick="exportCsv()">CSV</button>' +
+          '</div>' +
         '</div>' +
+        rowsHtml +
       '</div>' +
-      rowsHtml +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">WhatsApp-Nachrichten</div>' +
-      '<p style="font-size:.8rem;color:#888;margin-bottom:14px">Kopiere jede Nachricht und schicke sie der Person direkt:</p>' +
-      waHtml +
-    '</div>';
+      '<div class="card"><div class="card-title">WhatsApp-Nachrichten</div>' +
+        '<p style="font-size:.8rem;color:#888;margin-bottom:14px">Kopiere jede Nachricht und schicke sie der Person direkt:</p>' +
+        waHtml +
+      '</div>';
+  });
 }
 
 function copyUrl(i) {
   navigator.clipboard.writeText(_urls[i]).then(function() {
     var btn = document.getElementById('cb-' + i);
-    var orig = btn.textContent;
-    btn.textContent = '✓';
+    var orig = btn.textContent; btn.textContent = '✓';
     setTimeout(function(){ btn.textContent = orig; }, 1500);
   });
 }
-
 function copyMsg(i) { navigator.clipboard.writeText(_msgs[i]); }
-
 function copyAll() {
-  var text = state.participants.map(function(p, i){ return p.name + ': ' + _urls[i]; }).join('\n');
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(state.participants.map(function(p,i){ return p.name + ': ' + _urls[i]; }).join('\n'));
 }
-
 function exportCsv() {
-  var votes = getVotesForSurvey();
-  var rows = [['Name','Link','Status']];
-  state.participants.forEach(function(p, i) {
-    rows.push([p.name, _urls[i], votes[p.token] !== undefined ? 'Abgestimmt' : 'Ausstehend']);
+  fetchVotes().then(function(votes) {
+    var rows = [['Name','Link','Status']];
+    state.participants.forEach(function(p,i){ rows.push([p.name, _urls[i], votes[p.token]!==undefined?'Abgestimmt':'Ausstehend']); });
+    downloadCsv(rows, 'links.csv');
   });
-  downloadCsv(rows, 'links.csv');
 }
 
-// ── Render: Results ──────────────────────────────────────────────────────────
+// ── Render Results ────────────────────────────────────────────────────────────
 function renderResults() {
   if (!state.participants || !state.participants.length) return;
+  document.getElementById('results-content').innerHTML = '<p style="color:#aaa;font-size:.85rem;text-align:center;padding:1rem">Lädt…</p>';
 
-  var votes  = getVotesForSurvey();
-  var total  = state.participants.length;
-  var voted  = state.participants.filter(function(p){ return votes[p.token] !== undefined; }).length;
-  var opts   = state.options || [];
-  var counts = opts.map(function(){ return 0; });
+  fetchVotes().then(function(votes) {
+    var opts   = state.options || [];
+    var total  = state.participants.length;
+    var voted  = state.participants.filter(function(p){ return votes[p.token] !== undefined; }).length;
+    var counts = opts.map(function(){ return 0; });
+    state.participants.forEach(function(p) {
+      var a = votes[p.token];
+      if (a !== undefined && a >= 0 && a < opts.length) counts[a]++;
+    });
 
-  state.participants.forEach(function(p) {
-    var a = votes[p.token];
-    if (a !== undefined && a >= 0 && a < opts.length) counts[a]++;
-  });
+    var barsHtml = opts.map(function(opt, i) {
+      var pct = voted ? Math.round(counts[i] / voted * 100) : 0;
+      return '<div class="bar-wrap">' +
+        '<div class="bar-top"><span class="bar-q">' + esc(opt) + '</span><span class="bar-c">' + counts[i] + ' · ' + pct + '%</span></div>' +
+        '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
+      '</div>';
+    }).join('');
 
-  var barsHtml = opts.map(function(opt, i) {
-    var pct = voted ? Math.round(counts[i] / voted * 100) : 0;
-    return '<div class="bar-wrap">' +
-      '<div class="bar-top">' +
-        '<span class="bar-q">' + esc(opt) + '</span>' +
-        '<span class="bar-c">' + counts[i] + ' · ' + Math.round(pct) + '%</span>' +
+    var detailHtml = state.participants.map(function(p) {
+      var a = votes[p.token];
+      return '<div class="det-row">' +
+        '<span>' + esc(p.name) + '</span>' +
+        '<span>' + (a !== undefined ? '<span class="ans-yes">' + esc(opts[a]) + '</span>' : '<span class="ans-no">Noch nicht abgestimmt</span>') + '</span>' +
+      '</div>';
+    }).join('');
+
+    var now = new Date().toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+
+    document.getElementById('results-content').innerHTML =
+      '<p class="refreshing">Zuletzt aktualisiert: ' + now + ' · <a href="#" onclick="renderResults();return false;">Neu laden</a></p>' +
+      '<div class="stat-grid">' +
+        '<div class="stat"><div class="stat-n">' + total + '</div><div class="stat-l">Eingeladen</div></div>' +
+        '<div class="stat"><div class="stat-n">' + voted + '</div><div class="stat-l">Abgestimmt</div></div>' +
+        '<div class="stat"><div class="stat-n">' + (total ? Math.round(voted/total*100)+'%' : '–') + '</div><div class="stat-l">Beteiligung</div></div>' +
       '</div>' +
-      '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
-    '</div>';
-  }).join('');
-
-  var detailHtml = state.participants.map(function(p) {
-    var a = votes[p.token];
-    return '<div class="det-row">' +
-      '<span>' + esc(p.name) + '</span>' +
-      '<span>' + (a !== undefined
-        ? '<span class="ans-yes">' + esc(opts[a]) + '</span>'
-        : '<span class="ans-no">Noch nicht abgestimmt</span>'
-      ) + '</span>' +
-    '</div>';
-  }).join('');
-
-  document.getElementById('results-content').innerHTML =
-    '<div class="stat-grid">' +
-      '<div class="stat"><div class="stat-n">' + total + '</div><div class="stat-l">Eingeladen</div></div>' +
-      '<div class="stat"><div class="stat-n">' + voted + '</div><div class="stat-l">Abgestimmt</div></div>' +
-      '<div class="stat"><div class="stat-n">' + (total ? Math.round(voted/total*100) + '%' : '–') + '</div><div class="stat-l">Beteiligung</div></div>' +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">Ergebnis</div>' +
-      barsHtml +
-    '</div>' +
-    '<div class="card">' +
-      '<div class="card-title">Wer hat wie abgestimmt (nur für dich)</div>' +
-      detailHtml +
-    '</div>' +
-    '<div style="text-align:center;margin-top:.75rem">' +
-      '<button class="btn btn-sm" onclick="exportResultsCsv()">Ergebnisse als CSV</button>' +
-    '</div>';
+      '<div class="card"><div class="card-title">Ergebnis</div>' + barsHtml + '</div>' +
+      '<div class="card"><div class="card-title">Wer hat wie abgestimmt (nur für dich)</div>' + detailHtml + '</div>' +
+      '<div style="text-align:center;margin-top:.75rem"><button class="btn btn-sm" onclick="exportResultsCsv()">Ergebnisse als CSV</button></div>';
+  }).catch(function() {
+    document.getElementById('results-content').innerHTML = '<p style="color:#c00;font-size:.85rem;text-align:center;padding:1rem">Verbindungsfehler – bitte Seite neu laden.</p>';
+  });
 }
 
 function exportResultsCsv() {
-  var votes = getVotesForSurvey();
-  var opts = state.options || [];
-  var rows = [['Name','Antwort','Abgestimmt']];
-  state.participants.forEach(function(p) {
-    var a = votes[p.token];
-    rows.push([p.name, a !== undefined ? opts[a] : '', a !== undefined ? 'Ja' : 'Nein']);
+  fetchVotes().then(function(votes) {
+    var opts = state.options || [];
+    var rows = [['Name','Antwort','Abgestimmt']];
+    state.participants.forEach(function(p) {
+      var a = votes[p.token];
+      rows.push([p.name, a!==undefined ? opts[a] : '', a!==undefined ? 'Ja' : 'Nein']);
+    });
+    downloadCsv(rows, 'ergebnisse.csv');
   });
-  downloadCsv(rows, 'ergebnisse.csv');
 }
 
-// ── CSV download ─────────────────────────────────────────────────────────────
 function downloadCsv(rows, filename) {
-  var csv = rows.map(function(r) {
-    return r.map(function(c){ return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
-  }).join('\n');
-  var a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
-  a.download = filename;
-  a.click();
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var a = document.createElement('a'); a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv); a.download = filename; a.click();
 }
 
-// ── Auto-refresh results every 8s ────────────────────────────────────────────
+// ── Auto-refresh every 15s on results tab ────────────────────────────────────
 setInterval(function() {
-  var panel = document.getElementById('panel-results');
-  if (panel && panel.classList.contains('on')) renderResults();
-}, 8000);
+  if (document.getElementById('panel-results').classList.contains('on')) renderResults();
+}, 15000);
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 loadState();

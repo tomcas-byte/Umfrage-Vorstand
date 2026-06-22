@@ -8,241 +8,178 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #f4f4f1;
-  color: #1a1a18;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 2rem 1rem;
+  background: #f4f4f1; color: #1a1a18;
+  min-height: 100vh; display: flex;
+  align-items: flex-start; justify-content: center; padding: 2rem 1rem;
 }
-.card {
-  background: #fff;
-  border: 1px solid #e0e0dc;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 460px;
-  overflow: hidden;
-}
-.card-head {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e0e0dc;
-}
+.card { background: #fff; border: 1px solid #e0e0dc; border-radius: 12px; width: 100%; max-width: 460px; overflow: hidden; }
+.card-head { padding: 1.5rem; border-bottom: 1px solid #e0e0dc; }
 .card-head h1 { font-size: 1.05rem; font-weight: 600; }
 .card-head p  { font-size: 0.82rem; color: #666; margin-top: 4px; }
 .card-body { padding: 1.5rem; }
-.hint {
-  background: #f4f4f1;
-  border: 1px solid #e0e0dc;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 0.82rem;
-  color: #666;
-  margin-bottom: 1.25rem;
-}
-.option {
-  border: 1px solid #e0e0dc;
-  border-radius: 8px;
-  padding: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-  transition: border-color 0.15s, background 0.15s;
-  user-select: none;
-}
+.hint { background: #f4f4f1; border: 1px solid #e0e0dc; border-radius: 8px; padding: 10px 14px; font-size: 0.82rem; color: #666; margin-bottom: 1.25rem; }
+.option { border: 1px solid #e0e0dc; border-radius: 8px; padding: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; transition: border-color 0.15s, background 0.15s; user-select: none; }
 .option:hover { border-color: #bbb; background: #f9f9f7; }
 .option.chosen { border-color: #1a9e74; background: #eaf7f2; }
-.dot {
-  width: 20px; height: 20px; border-radius: 50%;
-  border: 2px solid #ccc;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
+.dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ccc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .option.chosen .dot { border-color: #1a9e74; background: #1a9e74; }
-.dot-inner {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #fff; display: none;
-}
+.dot-inner { width: 7px; height: 7px; border-radius: 50%; background: #fff; display: none; }
 .option.chosen .dot-inner { display: block; }
 .option-text { font-size: 0.9rem; line-height: 1.45; }
-.submit {
-  display: block; width: 100%; padding: 12px;
-  margin-top: 1.5rem;
-  border: none; border-radius: 8px;
-  background: #1a1a18; color: #fff;
-  font-size: 0.95rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
+.submit { display: block; width: 100%; padding: 12px; margin-top: 1.5rem; border: none; border-radius: 8px; background: #1a1a18; color: #fff; font-size: 0.95rem; font-family: inherit; cursor: pointer; transition: opacity 0.15s; }
 .submit:hover { opacity: 0.85; }
 .submit:disabled { opacity: 0.3; cursor: not-allowed; }
 .anon { font-size: 0.75rem; color: #999; text-align: center; margin-top: 1rem; }
-
-/* success */
 .done { text-align: center; padding: 2.5rem 1.5rem; }
-.check {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: #eaf7f2; border: 2px solid #a7f3d0;
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.25rem; font-size: 1.6rem;
-}
+.check { width: 64px; height: 64px; border-radius: 50%; background: #eaf7f2; border: 2px solid #a7f3d0; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.6rem; }
 .done h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
 .done p  { font-size: 0.85rem; color: #666; line-height: 1.5; }
-.my-answers {
-  margin-top: 1.25rem; text-align: left;
-  background: #f4f4f1; border: 1px solid #e0e0dc;
-  border-radius: 8px; padding: 12px 14px;
-}
+.my-answers { margin-top: 1.25rem; text-align: left; background: #f4f4f1; border: 1px solid #e0e0dc; border-radius: 8px; padding: 12px 14px; }
 .my-answers .lbl { font-size: 0.75rem; color: #888; margin-bottom: 8px; }
-.ans-row {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 0.84rem; margin-bottom: 6px;
-}
+.ans-row { display: flex; align-items: center; gap: 10px; font-size: 0.84rem; margin-bottom: 6px; }
 .ans-row:last-child { margin-bottom: 0; }
 .dot-yes { width: 8px; height: 8px; border-radius: 50%; background: #1a9e74; flex-shrink: 0; }
 .dot-no  { width: 8px; height: 8px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
-
-/* error */
 .err { padding: 2.5rem 1.5rem; text-align: center; }
 .err h2 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
 .err p  { font-size: 0.85rem; color: #666; line-height: 1.5; }
+.loading { padding: 2.5rem 1.5rem; text-align: center; color: #888; font-size: 0.9rem; }
 </style>
 </head>
 <body>
-<div class="card" id="root"></div>
-
+<div class="card" id="root"><div class="loading">Wird geladen…</div></div>
 <script>
-function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+var SUPABASE_URL = 'https://fiftckimaagmcgadbqtm.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZnRja2ltYWFnbWNnYWRicXRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMjcyNTcsImV4cCI6MjA5NzcwMzI1N30.n15imNIzRuWEWtn9zyj4vKZzm0YroymB_5lSKUWNj20';
 
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 function decode(str) {
   return JSON.parse(decodeURIComponent(escape(atob(str))));
 }
-
-// localStorage keys – must match admin page
-var LS_VOTES = 'umfrage_votes_v4';
-var LS_VOTED = 'umfrage_myvotes_v4';
-
-function getVotesForSurvey(sid) {
-  try { return JSON.parse(localStorage.getItem(LS_VOTES) || '{}')[sid] || {}; }
-  catch(e) { return {}; }
+function setHtml(html) {
+  document.getElementById('root').innerHTML = html;
 }
 
-function saveVote(sid, token, answer) {
-  var all = {};
-  try { all = JSON.parse(localStorage.getItem(LS_VOTES) || '{}'); } catch(e) {}
-  if (!all[sid]) all[sid] = {};
-  all[sid][token] = answer;
-  localStorage.setItem(LS_VOTES, JSON.stringify(all));
+async function hasVotedRemote(surveyId, token) {
+  var res = await fetch(
+    SUPABASE_URL + '/rest/v1/votes?survey_id=eq.' + encodeURIComponent(surveyId) + '&token=eq.' + encodeURIComponent(token) + '&select=id',
+    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+  );
+  var rows = await res.json();
+  return Array.isArray(rows) && rows.length > 0;
 }
 
-function alreadyVoted(token) {
-  try { return !!JSON.parse(localStorage.getItem(LS_VOTED) || '{}')[token]; }
-  catch(e) { return false; }
+async function submitVote(surveyId, token, answer) {
+  var res = await fetch(SUPABASE_URL + '/rest/v1/votes', {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify({ survey_id: surveyId, token: token, answer: answer })
+  });
+  return res.ok;
 }
 
-function markVoted(token) {
-  var v = {};
-  try { v = JSON.parse(localStorage.getItem(LS_VOTED) || '{}'); } catch(e) {}
-  v[token] = true;
-  localStorage.setItem(LS_VOTED, JSON.stringify(v));
-}
-
-function showError(title, msg) {
-  document.getElementById('root').innerHTML =
-    '<div class="err"><h2>' + esc(title) + '</h2><p>' + esc(msg) + '</p></div>';
-}
-
-// --- Parse URL ---
 var params = new URLSearchParams(window.location.search);
 var raw = params.get('d');
 
 if (!raw) {
-  showError('Ungültiger Link', 'Dieser Link enthält keine Daten. Bitte wende dich an die Person, die ihn dir geschickt hat.');
+  setHtml('<div class="err"><h2>Ungültiger Link</h2><p>Dieser Link enthält keine Daten. Bitte wende dich an die Person, die ihn dir geschickt hat.</p></div>');
 } else {
   var data;
-  try { data = decode(raw); }
-  catch(e) { data = null; }
+  try { data = decode(raw); } catch(e) { data = null; }
 
   if (!data || !data.sid || !data.token || !data.name || !data.options || !data.question) {
-    showError('Ungültiger Link', 'Die Daten in diesem Link sind beschädigt. Bitte wende dich an die Person, die ihn dir geschickt hat.');
-  } else if (alreadyVoted(data.token) || getVotesForSurvey(data.sid)[data.token] !== undefined) {
-    document.getElementById('root').innerHTML =
-      '<div class="done">' +
-        '<div class="check">✓</div>' +
-        '<h2>Du hast bereits abgestimmt.</h2>' +
-        '<p>Dein persönlicher Link kann nur einmal verwendet werden.<br>Danke für deine Teilnahme!</p>' +
-      '</div>';
+    setHtml('<div class="err"><h2>Ungültiger Link</h2><p>Die Daten in diesem Link sind beschädigt.</p></div>');
   } else {
-    // Show voting form
-    var sid     = data.sid;
-    var token   = data.token;
-    var name    = data.name;
+    var sid      = data.sid;
+    var token    = data.token;
+    var name     = data.name;
     var question = data.question;
-    var options = data.options; // array of strings
+    var options  = data.options;
 
-    var optionsHtml = options.map(function(opt, i) {
-      return '<div class="option" id="opt-' + i + '" onclick="pick(' + i + ')">' +
-        '<div class="dot"><div class="dot-inner"></div></div>' +
-        '<div class="option-text">' + esc(opt) + '</div>' +
-      '</div>';
-    }).join('');
+    // Check if already voted
+    hasVotedRemote(sid, token).then(function(already) {
+      if (already) {
+        setHtml('<div class="done"><div class="check">✓</div><h2>Du hast bereits abgestimmt.</h2><p>Dein persönlicher Link kann nur einmal verwendet werden.<br>Danke für deine Teilnahme!</p></div>');
+        return;
+      }
 
-    document.getElementById('root').innerHTML =
-      '<div class="card-head">' +
-        '<h1>Anonyme Stimmungsabfrage</h1>' +
-        '<p>Hallo ' + esc(name) + ' – bitte wähle eine Antwort.</p>' +
-      '</div>' +
-      '<div class="card-body">' +
-        '<div class="hint">👆 Wähle eine der folgenden Antworten. Du kannst nur einmal abstimmen.</div>' +
-        '<div style="font-size:.9rem;font-weight:500;margin-bottom:12px">' + esc(question) + '</div>' +
-        optionsHtml +
-        '<button class="submit" id="submit-btn" disabled onclick="submit()">Abstimmen</button>' +
-        '<p class="anon">🔒 Deine Antwort ist anonym.</p>' +
-      '</div>';
-
-    var selected = null;
-
-    window.pick = function(i) {
-      selected = i;
-      options.forEach(function(_, j) {
-        document.getElementById('opt-' + j).classList.toggle('chosen', j === i);
-      });
-      document.getElementById('submit-btn').disabled = false;
-    };
-
-    window.submit = function() {
-      if (selected === null) return;
-      saveVote(sid, token, selected);
-      markVoted(token);
-
-      var answersHtml = options.map(function(opt, i) {
-        return '<div class="ans-row">' +
-          '<div class="' + (i === selected ? 'dot-yes' : 'dot-no') + '"></div>' +
-          '<span style="' + (i === selected ? 'font-weight:500' : 'color:#bbb') + '">' +
-            esc(opt) + ': <strong>' + (i === selected ? 'Ja' : 'Nein') + '</strong>' +
-          '</span>' +
+      // Show form
+      var optionsHtml = options.map(function(opt, i) {
+        return '<div class="option" id="opt-' + i + '" onclick="pick(' + i + ')">' +
+          '<div class="dot"><div class="dot-inner"></div></div>' +
+          '<div class="option-text">' + esc(opt) + '</div>' +
         '</div>';
       }).join('');
 
-      document.getElementById('root').innerHTML =
-        '<div class="done">' +
-          '<div class="check">✓</div>' +
-          '<h2>Danke für deine Stimme!</h2>' +
-          '<p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schließen.</p>' +
-          '<div class="my-answers">' +
-            '<div class="lbl">Deine Antworten (nur für dich sichtbar):</div>' +
-            answersHtml +
-          '</div>' +
-        '</div>';
-    };
+      setHtml(
+        '<div class="card-head"><h1>Anonyme Stimmungsabfrage</h1><p>Hallo ' + esc(name) + ' – bitte wähle eine Antwort.</p></div>' +
+        '<div class="card-body">' +
+          '<div class="hint">👆 Wähle eine der folgenden Antworten. Du kannst nur einmal abstimmen.</div>' +
+          '<div style="font-size:.9rem;font-weight:500;margin-bottom:12px">' + esc(question) + '</div>' +
+          optionsHtml +
+          '<button class="submit" id="submit-btn" disabled onclick="doSubmit()">Abstimmen</button>' +
+          '<p class="anon">🔒 Deine Antwort ist anonym.</p>' +
+        '</div>'
+      );
+
+      var selected = null;
+
+      window.pick = function(i) {
+        selected = i;
+        options.forEach(function(_, j) {
+          document.getElementById('opt-' + j).classList.toggle('chosen', j === i);
+        });
+        document.getElementById('submit-btn').disabled = false;
+      };
+
+      window.doSubmit = function() {
+        if (selected === null) return;
+        var btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Wird gespeichert…';
+
+        submitVote(sid, token, selected).then(function(ok) {
+          if (!ok) {
+            btn.disabled = false;
+            btn.textContent = 'Abstimmen';
+            alert('Fehler beim Speichern. Bitte versuche es nochmal.');
+            return;
+          }
+          var answersHtml = options.map(function(opt, i) {
+            return '<div class="ans-row">' +
+              '<div class="' + (i === selected ? 'dot-yes' : 'dot-no') + '"></div>' +
+              '<span style="' + (i === selected ? 'font-weight:500' : 'color:#bbb') + '">' +
+                esc(opt) + ': <strong>' + (i === selected ? 'Ja' : 'Nein') + '</strong>' +
+              '</span></div>';
+          }).join('');
+
+          setHtml(
+            '<div class="done">' +
+              '<div class="check">✓</div>' +
+              '<h2>Danke für deine Stimme!</h2>' +
+              '<p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schließen.</p>' +
+              '<div class="my-answers">' +
+                '<div class="lbl">Deine Antworten (nur für dich sichtbar):</div>' +
+                answersHtml +
+              '</div>' +
+            '</div>'
+          );
+        }).catch(function() {
+          btn.disabled = false;
+          btn.textContent = 'Abstimmen';
+          alert('Netzwerkfehler. Bitte versuche es nochmal.');
+        });
+      };
+    }).catch(function() {
+      setHtml('<div class="err"><h2>Verbindungsfehler</h2><p>Konnte keine Verbindung zur Datenbank herstellen. Bitte versuche es später nochmal.</p></div>');
+    });
   }
 }
 </script>
