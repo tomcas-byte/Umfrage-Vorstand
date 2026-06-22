@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stimmungsumfrage</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --border: #e2e2de;
+    --text: #1a1a18;
+    --muted: #6b6b67;
+    --green: #1a9e74;
+    --green-bg: #eaf7f2;
+    --green-border: #a7f3d0;
+    --amber: #b45309;
+    --amber-bg: #fef3c7;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'SF Mono', 'Fira Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+
+  /* ── SHARED ── */
+  .page { max-width: 760px; margin: 0 auto; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 1rem; }
+  label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 4px; }
+  input[type=text], textarea {
+    width: 100%; padding: 8px 12px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 0.9rem; font-family: var(--font);
+    background: var(--bg); color: var(--text);
+    outline: none; transition: border-color 0.15s;
+  }
+  input[type=text]:focus, textarea:focus { border-color: #888; }
+  textarea { resize: vertical; min-height: 130px; font-size: 0.85rem; }
+  .btn {
+    padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 0.85rem; font-family: var(--font); cursor: pointer;
+    background: var(--surface); color: var(--text); transition: background 0.12s;
+  }
+  .btn:hover { background: var(--bg); }
+  .btn-primary { background: var(--text); color: var(--surface); border-color: var(--text); }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-sm { padding: 5px 10px; font-size: 0.78rem; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── ADMIN ── */
+  header { margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  header h1 { font-size: 1.1rem; font-weight: 600; }
+  header p  { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .badge-admin { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 500; background: var(--amber-bg); color: var(--amber); border: 1px solid #fde68a; }
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .tab { padding: 9px 18px; font-size: 0.85rem; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: var(--font); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .q-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .q-num { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; color: var(--muted); flex-shrink: 0; }
+  .info-box { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.82rem; color: #065f46; margin-bottom: 1rem; }
+  .link-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--bg); }
+  .link-row:last-child { border-bottom: none; }
+  .person-name { font-size: 0.85rem; font-weight: 500; min-width: 90px; }
+  .mono-url { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); background: var(--bg); padding: 4px 8px; border-radius: 4px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+  .pill-gray  { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+  .pill-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1.25rem; }
+  .stat { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .stat-num { font-size: 1.8rem; font-weight: 600; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .bar-group { margin-bottom: 1rem; }
+  .bar-meta { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; }
+  .bar-q { color: var(--text); font-weight: 500; max-width: 72%; }
+  .bar-c { color: var(--muted); }
+  .bar-track { background: #eee; border-radius: 4px; height: 7px; overflow: hidden; }
+  .bar-fill { height: 7px; background: var(--green); border-radius: 4px; transition: width 0.4s; }
+  .detail-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--bg); font-size: 0.83rem; gap: 8px; }
+  .detail-row:last-child { border-bottom: none; }
+  .ans-ja { color: var(--green); font-weight: 500; }
+  .ans-pending { color: var(--muted); font-style: italic; }
+  .wa-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.8rem; font-family: var(--mono); white-space: pre-wrap; color: var(--text); margin-top: 6px; }
+
+  /* ── VOTE ── */
+  .vote-wrap { max-width: 480px; margin: 0 auto; }
+  .vote-header { padding: 1.5rem 1.5rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .vote-header h1 { font-size: 1.05rem; font-weight: 600; }
+  .vote-header p  { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+  .vote-body { padding: 1.5rem; }
+  .rule-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .q-option { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; transition: border-color 0.15s, background 0.15s; }
+  .q-option:hover { border-color: #bbb; background: var(--bg); }
+  .q-option.selected { border-color: var(--green); background: var(--green-bg); }
+  .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .q-option.selected .radio { border-color: var(--green); background: var(--green); }
+  .radio-dot { width: 7px; height: 7px; border-radius: 50%; background: white; display: none; }
+  .q-option.selected .radio-dot { display: block; }
+  .q-text { font-size: 0.9rem; line-height: 1.45; }
+  .submit-btn { display: block; width: 100%; padding: 12px; margin-top: 1.5rem; border: none; border-radius: var(--radius-sm); background: var(--text); color: white; font-size: 0.95rem; font-family: var(--font); cursor: pointer; transition: opacity 0.15s; }
+  .submit-btn:hover { opacity: 0.85; }
+  .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .anon-note { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 1rem; }
+  .success-wrap { text-align: center; padding: 2.5rem 1.5rem; }
+  .check-circle { width: 64px; height: 64px; border-radius: 50%; background: var(--green-bg); border: 2px solid var(--green-border); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 1.75rem; }
+  .success-wrap h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+  .success-wrap p  { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+  .own-answer { margin-top: 1.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; text-align: left; }
+  .own-answer .oa-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+  .oa-row { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; margin-bottom: 5px; }
+  .dot-g { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .dot-x { width: 8px; height: 8px; border-radius: 50%; background: #ddd; flex-shrink: 0; }
+  .err-wrap { padding: 2.5rem 1.5rem; text-align: center; color: var(--muted); }
+  .err-wrap h2 { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .err-wrap p  { font-size: 0.85rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+//  ROUTING – decide which view to render
+// ══════════════════════════════════════════════════════════════════════════════
+const params = new URLSearchParams(window.location.search);
+const mode   = params.get('mode'); // 'vote' or null (admin)
+
+if (mode === 'vote') {
+  renderVotePage();
+} else {
+  renderAdminPage();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  SHARED UTILS
+// ══════════════════════════════════════════════════════════════════════════════
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function b64encode(obj) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+}
+
+function b64decode(str) {
+  return JSON.parse(decodeURIComponent(escape(atob(str))));
+}
+
+function makeToken() {
+  const arr = new Uint8Array(9);
+  crypto.getRandomValues(arr);
+  return Array.from(arr).map(b => b.toString(36).padStart(2,'0')).join('').slice(0,16);
+}
+
+function selfUrl() {
+  const u = new URL(window.location.href);
+  return u.origin + u.pathname;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  VOTE STORAGE  (keyed per survey token, stored in admin's localStorage)
+// ══════════════════════════════════════════════════════════════════════════════
+const VOTES_LS = 'umfrage_votes_v2';
+
+function allVotes() {
+  try { return JSON.parse(localStorage.getItem(VOTES_LS) || '{}'); } catch(e) { return {}; }
+}
+
+function recordVote(surveyId, token, answerIndex) {
+  const v = allVotes();
+  if (!v[surveyId]) v[surveyId] = {};
+  v[surveyId][token] = answerIndex;
+  localStorage.setItem(VOTES_LS, JSON.stringify(v));
+}
+
+function votesForSurvey(surveyId) {
+  return allVotes()[surveyId] || {};
+}
+
+function hasVoted(surveyId, token) {
+  return votesForSurvey(surveyId)[token] !== undefined;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  ADMIN PAGE
+// ══════════════════════════════════════════════════════════════════════════════
+function renderAdminPage() {
+  document.title = 'Umfrage – Admin';
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="page">
+      <header>
+        <div>
+          <h1>🗳 Stimmungsumfrage – Admin</h1>
+          <p>Nur für dich sichtbar. Teile diese Seite nicht.</p>
+        </div>
+        <span class="badge-admin">⚙ Admin</span>
+      </header>
+
+      <div class="tab-bar">
+        <button class="tab active" id="tab-btn-setup"  onclick="adminTab('setup')">Einrichten</button>
+        <button class="tab"        id="tab-btn-links"  onclick="adminTab('links')">Links</button>
+        <button class="tab"        id="tab-btn-results"onclick="adminTab('results')">Ergebnisse</button>
+      </div>
+
+      <!-- SETUP -->
+      <div class="section active" id="tab-setup">
+        <div class="card">
+          <div class="card-title">Fragen</div>
+          <div class="q-row"><div class="q-num">1</div><input type="text" id="q1" value="Bin ich zufrieden mit der Gruppenatmosphäre?" maxlength="120"></div>
+          <div class="q-row"><div class="q-num">2</div><input type="text" id="q2" value="Fühle ich mich gut informiert?" maxlength="120"></div>
+          <div class="q-row"><div class="q-num">3</div><input type="text" id="q3" value="Würde ich die Gruppe weiterempfehlen?" maxlength="120"></div>
+          <p style="font-size:0.78rem;color:var(--muted);margin-top:10px">Jede Person darf genau einer Frage Ja wählen.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">Teilnehmer</div>
+          <label>Namen – einer pro Zeile:</label>
+          <textarea id="names-input" placeholder="Anna&#10;Ben&#10;Clara&#10;David&#10;..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="generateLinks()" style="width:100%;padding:12px;font-size:0.95rem;margin-top:0.25rem">Links generieren →</button>
+      </div>
+
+      <!-- LINKS -->
+      <div class="section" id="tab-links">
+        <div id="links-body">
+          <p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:2rem">
+            Geh zuerst zu „Einrichten" und generiere die Links.
+          </p>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="section" id="tab-results">
+        <div id="results-body">
+          <p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:2rem">
+            Noch keine Abstimmungen vorhanden.
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  loadAdminState();
+}
+
+// ── State ──────────────────────────────────────────────────────────────────
+const ADMIN_LS = 'umfrage_admin_v2';
+let adminState = { surveyId: null, questions: ['','',''], participants: [] };
+
+function saveAdminState() {
+  localStorage.setItem(ADMIN_LS, JSON.stringify(adminState));
+}
+
+function loadAdminState() {
+  try {
+    const raw = localStorage.getItem(ADMIN_LS);
+    if (!raw) return;
+    adminState = JSON.parse(raw);
+    if (adminState.questions) {
+      document.getElementById('q1').value = adminState.questions[0] || '';
+      document.getElementById('q2').value = adminState.questions[1] || '';
+      document.getElementById('q3').value = adminState.questions[2] || '';
+    }
+    if (adminState.participants && adminState.participants.length) {
+      const names = adminState.participants.map(p => p.name).join('\n');
+      document.getElementById('names-input').value = names;
+      refreshLinksView();
+      refreshResultsView();
+    }
+  } catch(e) {}
+}
+
+function getQuestions() {
+  return [
+    document.getElementById('q1').value.trim(),
+    document.getElementById('q2').value.trim(),
+    document.getElementById('q3').value.trim()
+  ];
+}
+
+// ── Generate ───────────────────────────────────────────────────────────────
+function generateLinks() {
+  const questions = getQuestions();
+  if (questions.some(q => !q)) { alert('Bitte alle drei Fragen ausfüllen.'); return; }
+  const raw   = document.getElementById('names-input').value;
+  const names = raw.split('\n').map(s => s.trim()).filter(Boolean);
+  if (!names.length) { alert('Bitte mindestens einen Namen eingeben.'); return; }
+
+  // Keep existing tokens
+  const existing = {};
+  (adminState.participants || []).forEach(p => { existing[p.name] = p.token; });
+
+  // New survey ID only if questions changed
+  const qKey = questions.join('|');
+  const prevQKey = (adminState.questions || []).join('|');
+  if (!adminState.surveyId || qKey !== prevQKey) {
+    adminState.surveyId = makeToken();
+  }
+
+  adminState.questions    = questions;
+  adminState.participants = names.map(name => ({
+    name,
+    token: existing[name] || makeToken()
+  }));
+
+  saveAdminState();
+  refreshLinksView();
+  adminTab('links');
+}
+
+// ── Links view ─────────────────────────────────────────────────────────────
+function refreshLinksView() {
+  const { surveyId, questions, participants } = adminState;
+  if (!participants || !participants.length) return;
+
+  const svotes = votesForSurvey(surveyId);
+  const base   = selfUrl();
+
+  function makeVoteUrl(p) {
+    const payload = b64encode({ s: surveyId, n: p.name, t: p.token, q: questions });
+    return `${base}?mode=vote&d=${payload}`;
+  }
+
+  document.getElementById('links-body').innerHTML = `
+    <div class="info-box">✓ Jeder Link ist personalisiert und kann nur einmal verwendet werden. Schicke jeden Link direkt und persönlich in WhatsApp.</div>
+    <div class="card">
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Einmal-Links</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm" onclick="copyAllLinks()">Alle kopieren</button>
+          <button class="btn btn-sm" onclick="exportLinksCSV()">CSV</button>
+        </div>
+      </div>
+      ${participants.map((p,i) => {
+        const url   = makeVoteUrl(p);
+        const voted = svotes[p.token] !== undefined;
+        return `
+          <div class="link-row">
+            <span class="person-name">${esc(p.name)}</span>
+            <span class="mono-url">${esc(url.slice(0,80))}…</span>
+            <span class="pill ${voted ? 'pill-green' : 'pill-gray'}">${voted ? '✓ Abgestimmt' : 'Ausstehend'}</span>
+            <button class="btn btn-sm" id="cbtn-${i}" onclick="copyOneLink(${i})">Kopieren</button>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">WhatsApp-Nachrichten</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px">Kopiere jede Nachricht und schicke sie der Person direkt:</p>
+      ${participants.map((p,i) => {
+        const url = makeVoteUrl(p);
+        const msg = `Hallo ${p.name}, hier ist dein persönlicher Link für unsere anonyme Gruppenumfrage:\n\n${url}\n\nBitte nicht weiterschicken – der Link ist nur für dich.`;
+        return `
+          <div style="margin-bottom:14px">
+            <div style="font-size:0.78rem;color:var(--muted);font-weight:500;margin-bottom:4px">${esc(p.name)}</div>
+            <div class="wa-block" id="wa-${i}">${esc(msg)}</div>
+            <button class="btn btn-sm" style="margin-top:6px" onclick="copyWA(${i})">Nachricht kopieren</button>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // store urls for copy functions
+  window._voteUrls = participants.map(p => makeVoteUrl(p));
+  window._waTexts  = participants.map(p => {
+    const url = makeVoteUrl(p);
+    return `Hallo ${p.name}, hier ist dein persönlicher Link für unsere anonyme Gruppenumfrage:\n\n${url}\n\nBitte nicht weiterschicken – der Link ist nur für dich.`;
+  });
+}
+
+function copyOneLink(i) {
+  navigator.clipboard.writeText(window._voteUrls[i]).then(() => {
+    const btn = document.getElementById('cbtn-'+i);
+    const orig = btn.textContent;
+    btn.textContent = '✓ Kopiert';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  });
+}
+
+function copyAllLinks() {
+  const { participants } = adminState;
+  const lines = participants.map((p,i) => `${p.name}: ${window._voteUrls[i]}`).join('\n');
+  navigator.clipboard.writeText(lines);
+}
+
+function copyWA(i) {
+  navigator.clipboard.writeText(window._waTexts[i]);
+}
+
+function exportLinksCSV() {
+  const { participants } = adminState;
+  const rows = [['Name','Link','Status']];
+  const svotes = votesForSurvey(adminState.surveyId);
+  participants.forEach((p,i) => rows.push([p.name, window._voteUrls[i], svotes[p.token] !== undefined ? 'Abgestimmt' : 'Ausstehend']));
+  downloadCSV(rows, 'links.csv');
+}
+
+// ── Results view ───────────────────────────────────────────────────────────
+function refreshResultsView() {
+  const { surveyId, questions, participants } = adminState;
+  if (!participants || !participants.length) return;
+
+  const svotes = votesForSurvey(surveyId);
+  const total  = participants.length;
+  const voted  = participants.filter(p => svotes[p.token] !== undefined).length;
+  const counts = [0,0,0];
+  participants.forEach(p => {
+    const a = svotes[p.token];
+    if (a !== undefined && a >= 0 && a <= 2) counts[a]++;
+  });
+
+  document.getElementById('results-body').innerHTML = `
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-num">${total}</div><div class="stat-label">Eingeladen</div></div>
+      <div class="stat"><div class="stat-num">${voted}</div><div class="stat-label">Abgestimmt</div></div>
+      <div class="stat"><div class="stat-num">${total ? Math.round(voted/total*100)+'%' : '–'}</div><div class="stat-label">Beteiligung</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ergebnis je Frage</div>
+      ${(questions||[]).map((q,i) => {
+        const pct = voted ? Math.round(counts[i]/voted*100) : 0;
+        return `
+          <div class="bar-group">
+            <div class="bar-meta">
+              <span class="bar-q">${esc(q)}</span>
+              <span class="bar-c">${counts[i]} Ja · ${voted-counts[i]} Nein</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Wer hat wie abgestimmt (nur für dich)</div>
+      ${participants.map(p => {
+        const a = svotes[p.token];
+        const voted = a !== undefined;
+        return `
+          <div class="detail-row">
+            <span>${esc(p.name)}</span>
+            <span>${voted
+              ? `<span class="ans-ja">Ja: ${esc(questions[a])}</span>`
+              : '<span class="ans-pending">Noch nicht abgestimmt</span>'
+            }</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div style="text-align:center;margin-top:0.5rem">
+      <button class="btn btn-sm" onclick="exportResultsCSV()">Ergebnisse als CSV</button>
+    </div>
+  `;
+}
+
+function exportResultsCSV() {
+  const { surveyId, questions, participants } = adminState;
+  const svotes = votesForSurvey(surveyId);
+  const rows = [['Name','Ja-Antwort','Abgestimmt']];
+  participants.forEach(p => {
+    const a = svotes[p.token];
+    rows.push([p.name, a !== undefined ? questions[a] : '', a !== undefined ? 'Ja' : 'Nein']);
+  });
+  downloadCSV(rows, 'ergebnisse.csv');
+}
+
+// ── Tab switching ──────────────────────────────────────────────────────────
+function adminTab(name) {
+  ['setup','links','results'].forEach(n => {
+    document.getElementById('tab-'+n).classList.toggle('active', n===name);
+    document.getElementById('tab-btn-'+n).classList.toggle('active', n===name);
+  });
+  if (name === 'links')   refreshLinksView();
+  if (name === 'results') refreshResultsView();
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+function downloadCSV(rows, filename) {
+  const csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download = filename;
+  a.click();
+}
+
+// Auto-refresh results every 8s when on results tab
+setInterval(() => {
+  if (document.getElementById('tab-results') &&
+      document.getElementById('tab-results').classList.contains('active')) {
+    refreshResultsView();
+  }
+}, 8000);
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  VOTE PAGE
+// ══════════════════════════════════════════════════════════════════════════════
+function renderVotePage() {
+  document.title = 'Anonyme Stimmungsumfrage';
+
+  // Decode payload from URL
+  let payload = null;
+  try {
+    const d = params.get('d');
+    if (!d) throw new Error('no data');
+    payload = b64decode(d);
+  } catch(e) {
+    showVoteError('Ungültiger Link', 'Dieser Link ist nicht gültig. Bitte wende dich an die Person, die ihn dir geschickt hat.');
+    return;
+  }
+
+  const { s: surveyId, n: name, t: token, q: questions } = payload;
+
+  if (!surveyId || !token || !name || !questions || questions.length !== 3) {
+    showVoteError('Ungültiger Link', 'Die Daten in diesem Link sind unvollständig.');
+    return;
+  }
+
+  if (hasVoted(surveyId, token)) {
+    showAlreadyVoted();
+    return;
+  }
+
+  // Render vote form
+  document.getElementById('app').innerHTML = `
+    <div class="vote-wrap">
+      <div class="card" style="padding:0">
+        <div class="vote-header">
+          <h1>Anonyme Stimmungsabfrage</h1>
+          <p>Hallo ${esc(name)} – bitte wähle eine Antwort.</p>
+        </div>
+        <div class="vote-body">
+          <div class="rule-box">
+            👆 Du kannst bei <strong>genau einer</strong> Frage Ja wählen. Alle anderen sind automatisch Nein.
+          </div>
+          <div id="q-options">
+            ${questions.map((q,i) => `
+              <div class="q-option" id="qopt-${i}" onclick="selectQ(${i})">
+                <div class="radio" id="qradio-${i}"><div class="radio-dot"></div></div>
+                <div class="q-text">${esc(q)}</div>
+              </div>
+            `).join('')}
+          </div>
+          <button class="submit-btn" id="submit-btn" disabled onclick="doSubmit()">Abstimmen</button>
+          <p class="anon-note">🔒 Deine Antwort ist anonym.</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  let selectedIndex = null;
+
+  window.selectQ = function(i) {
+    selectedIndex = i;
+    for (let j = 0; j < 3; j++) {
+      document.getElementById('qopt-'+j).classList.toggle('selected', j === i);
+    }
+    document.getElementById('submit-btn').disabled = false;
+  };
+
+  window.doSubmit = function() {
+    if (selectedIndex === null) return;
+    recordVote(surveyId, token, selectedIndex);
+
+    document.getElementById('app').innerHTML = `
+      <div class="vote-wrap">
+        <div class="card" style="padding:0">
+          <div class="success-wrap">
+            <div class="check-circle">✓</div>
+            <h2>Danke für deine Stimme!</h2>
+            <p>Deine Antwort wurde gespeichert.<br>Du kannst das Fenster jetzt schließen.</p>
+            <div class="own-answer">
+              <div class="oa-label">Deine Antworten (nur für dich sichtbar):</div>
+              ${questions.map((q,i) => `
+                <div class="oa-row">
+                  <div class="${i === selectedIndex ? 'dot-g' : 'dot-x'}"></div>
+                  <span style="${i === selectedIndex ? 'font-weight:500' : 'color:#bbb'}">${esc(q)}: <strong>${i === selectedIndex ? 'Ja' : 'Nein'}</strong></span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+}
+
+function showVoteError(title, msg) {
+  document.getElementById('app').innerHTML = `
+    <div class="vote-wrap">
+      <div class="card">
+        <div class="err-wrap">
+          <h2>${esc(title)}</h2>
+          <p>${esc(msg)}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showAlreadyVoted() {
+  document.getElementById('app').innerHTML = `
+    <div class="vote-wrap">
+      <div class="card">
+        <div class="err-wrap">
+          <h2>Du hast bereits abgestimmt.</h2>
+          <p>Dein persönlicher Link kann nur einmal verwendet werden.<br>Danke für deine Teilnahme!</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
